@@ -1,46 +1,96 @@
-const generateRPS = () => {
-    const theDecision = Math.floor(Math.random() * 3)
-    switch (theDecision){
-        case 0:
-            return 'rock'
-        case 1:
-            return 'paper'
-        case 2:
-            return 'scissors'
+class RockPaperScissorsGame {
+    constructor(){
+        this.playerChoice = '';
+        this.computerChoice = '';
+        this.playerScore = 0;
+        this.computerScore = 0;
+        this.winningScore = 5;
+
+        this.gameMessageArea = document.querySelector('#gameMessageArea');
+        this.turnMessageArea = document.querySelector('#turnMessageArea');
+        this.pScoreArea = document.querySelector('#playerMath');
+        this.cScoreArea = document.querySelector('#computerMath');
+
+        this.gameMessageArea.innerHTML = "Make a choice!";
+        this.pScoreArea.innerHTML = this.playerScore;
+        this.cScoreArea.innerHTML = this.computerScore;
+    }
+
+    gameFinish(whoWon){
+        this.gameMessageArea.innerHTML = `Game over! ${whoWon} won!`;
+        const theButtons = document.querySelectorAll('.choiceBox button');
+        theButtons.forEach((element) =>{
+            element.disabled = true;
+        });
+     
+    }
+
+    scoreUpdate(isPlayer){
+        if(isPlayer === 'player'){
+            this.playerScore++;
+            this.pScoreArea.innerHTML = this.playerScore;
+        }else{
+            this.computerScore++;
+            this.cScoreArea.innerHTML = this.computerScore;
+        }
+
+        if(this.playerScore >= this.winningScore){
+            this.gameFinish('You');
+        }
+        if(this.computerScore >= this.winningScore){
+            this.gameFinish('The computer');
+        }
+    }
+
+    generateComputerChoice(){
+        const decision = Math.floor(Math.random() * 3);
+        switch (decision) {
+            case 0:
+                return 'rock';
+            case 1:
+                return 'paper';
+            case 2:
+                return 'scissors';
+        }
+    }
+
+    decideOutcome() {
+        const playerChoice = this.playerChoice.toLowerCase();
+        this.computerChoice = this.generateComputerChoice();
+
+        while(playerChoice === this.computerChoice){
+            this.computerChoice = this.generateComputerChoice();
+        }
+
+        if(
+            (playerChoice === 'rock' && this.computerChoice === 'scissors') ||
+            (playerChoice === 'scissors' && this.computerChoice === 'paper') ||
+            (playerChoice === 'paper' && this.computerChoice === 'rock')
+        ){
+            this.scoreUpdate('player');
+            return `${playerChoice} beats ${this.computerChoice}. You win!`;
+        }
+            this.scoreUpdate('computer');
+            return `${this.computerChoice} beats ${playerChoice}. You lose!`;
+    }
+
+    playRound(playerChoice){
+        this.playerChoice = playerChoice;
+        this.turnMessageArea.innerHTML = this.decideOutcome();
     }
 }
+  
+const game = new RockPaperScissorsGame();
+const rockButton = document.querySelector('#rockButton');
+const paperButton = document.querySelector('#paperButton');
+const scissorsButton = document.querySelector('#scissorsButton');
 
-const decideOutcome = (playerInput, computerInput) => {
-    let playerChoice = playerInput.toLowerCase();
-    let computerChoice = computerInput;
-    if(playerChoice === computerInput){
-        computerChoice = generateRPS()
-        decideOutcome(playerChoice, computerChoice)
-    }
-    if(playerChoice === 'rock'){
-        if(computerInput === 'scissors'){
-            return "Rock beats scissors. You win!"
-        }
-        return "Paper beats rock. You lose!"
-    }
-    if(playerChoice === 'scissors'){
-        if(computerInput === 'papers'){
-            return "Scissors beats paper. You win!"
-        }
-        return "Rock beats scissors. You lose!"
-    }
-    if(playerChoice === 'paper'){
-        if(computerInput === 'rock'){
-            return "Paper beats rock. You win!"
-        }
-        return "Scissors beats paper. You lose!"
-    }
+rockButton.onclick = () => {
+    game.playRound('rock');
 }
-
-const playRound = (playNumber) => {
-    for(let i = 0; i < playNumber; i++){
-        console.log(decideOutcome(prompt("Rock, Paper, Scissors?"), generateRPS()))
-    }
+paperButton.onclick = () => {
+    game.playRound('paper');
 }
-
-playRound(5)
+scissorsButton.onclick = () => {
+    game.playRound('scissors');
+}

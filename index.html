@@ -1,3 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Odin Project RPS</title>
+        <style>
+            #turnMessageArea::first-letter{
+                text-transform: capitalize;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div id="gameMessageArea">Make a choice!</div>
+            <div id="turnMessageArea"></div>
+            <div class="scoreBox">
+                <div class="myScore">My score: <span id="playerMath">0</span></div>
+                <div class="comScore">Computer score: <span id="computerMath">0</span></div>
+            </div>
+            <div class="choiceBox">
+                <button type="button" id="rockButton">Rock</button>
+                <button type="button" id="paperButton">Paper</button>
+                <button type="button" id="scissorsButton">Scissors</button>
+            </div>
+        </main>
+    </body>
     <script src="script.js" defer></script>
 </html>
